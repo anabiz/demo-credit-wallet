@@ -1,0 +1,32 @@
+import express from "express";
+import logger from "morgan";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import usersRouter from "./routes/user";
+import authRouter from "./routes/auth";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const app = express();
+
+app.use(cors({origin: "*", credentials: true }));
+app.use(express.json());
+app.use(logger("dev"));
+app.use(cookieParser());
+
+//routes
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/auth", authRouter);
+
+app.get("/", (req, res) => {
+  res.status(200).send("api is running...");
+});
+
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+export default app;
