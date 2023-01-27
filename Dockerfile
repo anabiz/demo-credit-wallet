@@ -23,4 +23,4 @@ COPY --from=base /build /build
 
 # Expose port 3000
 EXPOSE 3001
-CMD ["build/app.js"]
+CMD ["build/src/app.js"]
