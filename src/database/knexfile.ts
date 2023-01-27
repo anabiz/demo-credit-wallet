@@ -1,19 +1,25 @@
 import type { Knex } from "knex";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({path: '../../.env'});
 
-const {DB_NAME, DB_PASSWORD, DB_USER, DB_PORT} = process.env;
+const {
+  DB_NAME, 
+  DB_PASSWORD, 
+  DB_USER, 
+  DB_PORT, 
+  DB_HOST
+} = process.env;
 
-// Update with your config settings.
-
-export const configs: { [key: string]: Knex.Config } = {
+const config: {[key: string]: Knex.Config} = {
   development: {
     client: "mysql2",
     connection: {
+      host: DB_HOST,
+      port: Number(DB_PORT),
       database: DB_NAME,
+      password: DB_PASSWORD,
       user: DB_USER,
-      password: DB_PASSWORD
     },
     pool: {
       min: 2,
@@ -27,37 +33,27 @@ export const configs: { [key: string]: Knex.Config } = {
     useNullAsDefault: true
   },
 
-  staging: {
-    client: "postgresql",
-    connection: {
-      database: "my_db",
-      user: "username",
-      password: "password"
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: "knex_migrations"
-    }
-  },
-
   production: {
-    client: "postgresql",
+    client: "mysql2",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password"
+      host: DB_HOST,
+      port: Number(DB_PORT),
+      database: DB_NAME,
+      password: DB_PASSWORD,
+      user: DB_USER,
     },
     pool: {
       min: 2,
       max: 10
     },
     migrations: {
-      tableName: "knex_migrations"
+      tableName: "knex_migrations",
+      directory: './migrations'
     },
+    debug: true,
     useNullAsDefault: true
   }
 
 };
+
+export default config;

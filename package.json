@@ -5,12 +5,14 @@
   "author": "anthony <anabizconcept9@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node build/app.js",
-    "dev": "nodemon build/app.js",
+    "start": "node build/src/app.js",
+    "dev": "nodemon build/src/app.js",
     "compile": "tsc",
     "test": "jest",
     "test:watch": "jest --watch",
-    "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts"
+    "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
+    "migrate:latest": "knex migrate:latest",
+    "migrate:make": "knex migrate:make"
   },
   "dependencies": {
     "@types/cors": "^2.8.13",
