@@ -9,7 +9,7 @@ import {
   appError, 
   errorHandler, 
   notFound 
-} from "./Middlewares/errorMiddleware";
+} from "./Middlewares/errorHandlers";
 
 dotenv.config();
 
