@@ -68,7 +68,8 @@ const register = async (req: Request, res: Response) => {
       password: encryptedPassword, 
       firstName, 
       lastName, 
-      phoneNumber
+      phoneNumber,
+      isVerified: true
     }
     let wallet : Wallet = {
       id: walletId,
