@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import usersRouter from "./routes/user";
 import authRouter from "./routes/auth";
+import transactionRouter from "./routes/transactions";
 import dotenv from "dotenv";
 import { 
   appError, 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 //routes
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/transactions", transactionRouter);
 
 app.get("/", (req, res) => {
   res.status(200).send("api is running...");

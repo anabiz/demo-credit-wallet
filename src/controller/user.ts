@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 import db from "../database/db";
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from "uuid";
-import { generateWalletId, validateWalletId } from '../utils/helpers';
+import { generateWalletId } from '../utils/helpers';
 import { 
   getUserByEmail,
   createUserAndWallet 
