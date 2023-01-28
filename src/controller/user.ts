@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { option, registerSchema } from "../utils/validations";
+import { 
+  option, 
+  registerSchema, 
+  transferSchema,
+  fundorWithdrawalSchema
+} from "../utils/validations";
 import jwt from 'jsonwebtoken';
 import db from "../database/db";
 import bcrypt from 'bcryptjs';
@@ -17,6 +22,7 @@ import {
   getWalletByWalletId, 
   updateWallet 
 } from "../services/wallet";
+import { Transaction } from "../interface/transaction";
 
 
 /**=========================== Register users ============================== **/
@@ -98,17 +104,19 @@ const register = async (req: Request, res: Response) => {
 
 /**=========================== Credit other users wallet ============================== **/
 const fundTransfer = async (req: Request, res: Response) => {
-  try{
-    const creditorWalletId = req.body.walletId;
-    const amount =  Number(req.body.amount);
-    const {id} = req.user;
 
-    if(!validateWalletId(creditorWalletId)){
-      return res.status(400).json({
-        message: "Invalid wallet ID",
-        Error: ""
-      });
-    }
+  const validateResult = transferSchema.validate(req.body, option);
+  if (validateResult.error) {
+    return res.status(400).json({
+      Message: "Invalid input",
+      Error: validateResult.error.details[0].message,
+    });
+  }
+  try{
+    const creditorWalletId = validateResult.value.walletId;
+    const amount =  Number(validateResult.value.amount);
+    const description = validateResult.value.description
+    const {id} = req.user;
 
     if(isNaN(amount)){
       return res.status(400).json({
@@ -142,12 +150,21 @@ const fundTransfer = async (req: Request, res: Response) => {
 
     const creditorBalance = Number(creditor.balance) + Number(amount);
     const debitorBalance = Number(debitor.balance) - Number(amount);
-
+    
+    const transactionParameter: Transaction ={
+      status: "approved",
+      reference: uuidv4(),
+      amount,
+      senderId: id,
+      receiverId: creditor.userId,
+      description
+    }
     await updateUsersWallet(
       debitorBalance,
       debitor.walletID,
       creditorBalance,
-      creditor.walletID
+      creditor.walletID,
+      transactionParameter
     )
 
     return res.status(200).json({
@@ -164,17 +181,26 @@ const fundTransfer = async (req: Request, res: Response) => {
 
 /**=========================== Fund withdraw ============================== **/
 const fundMyWallet = async (req: Request, res: Response) => {
-  try{
-    const amount =  Number(req.body.amount);
-    const {id} = req.user;
 
-    if(isNaN(amount)){
-      return res.status(400).json({
-        message: "Invalid amount",
-        Error: ""
-      });
-    }
-    
+  const validateResult = fundorWithdrawalSchema.validate(req.body, option);
+  if (validateResult.error) {
+    return res.status(400).json({
+      Message: "Invalid input",
+      Error: validateResult.error.details[0].message,
+    });
+  }
+  const amount =  Number(req.body.amount);
+  const description = validateResult.value.description;
+  const {id} = req.user;
+
+  if(isNaN(amount)){
+    return res.status(400).json({
+      message: "Invalid amount",
+      Error: ""
+    });
+  }
+
+  try{ 
     const wallet = await getWalletByUserId(id);
     if(!wallet){
       return res.status(400).json({
@@ -185,7 +211,20 @@ const fundMyWallet = async (req: Request, res: Response) => {
 
     const balance = Number(wallet.balance) + Number(amount);
 
-    await updateWallet(balance, wallet.walletID);
+    const transactionParameter: Transaction ={
+      status: "approved",
+      reference: uuidv4(),
+      amount,
+      senderId: id,
+      receiverId: id,
+      description
+    }
+    await updateWallet(
+      balance, 
+      wallet.walletID,
+      transactionParameter,
+      "debit"
+    );
 
     return res.status(200).json({
       message: "Wallet successfully credited",
@@ -201,6 +240,13 @@ const fundMyWallet = async (req: Request, res: Response) => {
 
 /**=========================== Credit my wallet ============================== **/
 const withdrawFund = async (req: Request, res: Response) => {
+  const validateResult = fundorWithdrawalSchema.validate(req.body, option);
+  if (validateResult.error) {
+    return res.status(400).json({
+      Message: "Invalid input",
+      Error: validateResult.error.details[0].message,
+    });
+  }
   try{
     const amount =  Number(req.body.amount);
     const {id} = req.user;
@@ -228,8 +274,20 @@ const withdrawFund = async (req: Request, res: Response) => {
     }
 
     const balance = Number(wallet.balance) - Number(amount);
-
-    await updateWallet(balance, wallet.walletID);
+    const transactionParameter: Transaction ={
+      status: "approved",
+      reference: uuidv4(),
+      amount,
+      senderId: id,
+      receiverId: id,
+      description: validateResult.value.description
+    }
+    await updateWallet(
+      balance, 
+      wallet.walletID,
+      transactionParameter,
+      "credit"
+    );
 
     return res.status(200).json({
       message: "withdrawal successful",

@@ -21,3 +21,14 @@ export const registerSchema = Joi.object().keys({
     lastName: Joi.string().required(),
     phoneNumber: Joi.string().required()
 });
+
+export const transferSchema = Joi.object().keys({
+  amount: Joi.number().required(),
+  walletId: Joi.string().length(9).required().pattern( new RegExp('^[0-9]+$')),
+  description: Joi.string().required(),
+});
+
+export const fundorWithdrawalSchema = Joi.object().keys({
+  amount: Joi.number().required(),
+  description: Joi.string().required(),
+});
