@@ -22,7 +22,7 @@ import {
   getWalletByWalletId, 
   updateWallet 
 } from "../services/wallet";
-import { Transaction } from "../interface/transaction";
+import { Transaction } from "../interface/transaction.dto";
 
 
 /**=========================== Register users ============================== **/

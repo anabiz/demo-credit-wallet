@@ -1,5 +1,5 @@
 import db from "../database/db";
-import { Transaction } from "../interface/transaction";
+import { Transaction } from "../interface/transaction.dto";
 import { WalletAndUser } from "../interface/wallet.dto";
 import { v4 as uuidv4 } from "uuid";
 
