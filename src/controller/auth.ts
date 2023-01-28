@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { loginSchema, option } from "../utils/validations";
 import db from '../database/db';
-import { User } from '../interface/index';
+import { User } from '../interface/user.dto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 
@@ -32,10 +32,8 @@ const login = async (req: Request, res: Response) => {
         Message: "you have not been verified",
       });
     }
-console.log("i am here")
-    if (user && await bcrypt.compare(password, user.password)) {
-      console.log("i am here")
 
+    if (user && await bcrypt.compare(password, user.password)) {
       const token = jwt.sign(
         { id: user.id, email },
         process.env.JWT_SECRET!,
