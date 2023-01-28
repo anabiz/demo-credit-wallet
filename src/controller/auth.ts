@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { loginSchema, option } from "../utils/validations";
-import db from '../database/db';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
+import { getUserByEmail } from "../services/user";
 
 
 /**==================== Login User ========================**/
@@ -17,7 +17,7 @@ const login = async (req: Request, res: Response) => {
     const {email, password} = validateResult.value;
 
     //check if the user exist
-    const user = await db.from('user').where('email', email).first();
+    const user = await getUserByEmail(email);
 
     if (!user) {
       return res.status(400).json({
@@ -36,7 +36,7 @@ const login = async (req: Request, res: Response) => {
       const token = jwt.sign(
         { id: user.id, email },
         process.env.JWT_SECRET!,
-        { expiresIn: "2h",}
+        { expiresIn: process.env.JWT_EXPIRATION,}
       );
 
       return res.status(200).json({
