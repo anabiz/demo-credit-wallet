@@ -302,6 +302,33 @@ const withdrawFund = async (req: Request, res: Response) => {
   }
 };
 
+/**=========================== Check Balance ============================== **/
+
+const getWalletInfo = async (req: Request, res: Response) => {
+
+  try{
+    const {id} = req.user;
+    
+    const wallet = await getWalletByUserId(id);
+    if(!wallet){
+      return res.status(400).json({
+        message: "User not found",
+        Error: ""
+      });
+    }
+
+    return res.status(200).json({
+      message: "wallet info successfully retrieved",
+      data: wallet
+    });
+
+  }catch(err){
+    res.status(500).json({
+      Message: "Unable to retreive wallet info",
+    });
+  }
+};
+
 //================= Reusuables ==============================
 const getWalletId = async() : Promise<string> =>{
   let id = generateWalletId();
@@ -317,5 +344,6 @@ export {
  register,
  fundTransfer,
  fundMyWallet,
- withdrawFund
+ withdrawFund,
+ getWalletInfo
 };
