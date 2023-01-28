@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { JwtExpPayload } from "../interface";
+import { JwtExpPayload } from "../interface/user.dto";
 
 declare global {
     namespace Express {

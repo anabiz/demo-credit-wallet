@@ -1,10 +1,17 @@
 import express from "express";
-import { register, creditWallet } from "../controller/user";
+import { 
+    register, 
+    fundMyWallet, 
+    fundTransfer,
+    withdrawFund 
+} from "../controller/user";
 import { isAuthenticated } from "../Middlewares/auth";
 const router = express.Router();
 
 
 router.post("/", register);
-router.post("/:id/credit", isAuthenticated, creditWallet)
+router.post("/fund-transfer", isAuthenticated, fundTransfer);
+router.post("/fund-me", isAuthenticated, fundMyWallet);
+router.post("/fund-withdrawal", isAuthenticated, withdrawFund);
 
 export default router;
