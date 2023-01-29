@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=walletDb
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - '3305:3306'
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  api-server:
+    build:
+      context: .
+    container_name: anthony-wallet-api
+    image: anthony-wallet-api
+    restart: unless-stopped
+    volumes:
+      - ./logs:/logs
+    networks:
+      - app-network
+    depends_on:
+      - db  
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./.env  
+    links:
+      - db  
+
+volumes:
+  db:
+    driver: local    
+
+networks:
+  app-network:
+    driver: bridge
