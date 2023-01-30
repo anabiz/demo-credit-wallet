@@ -6,6 +6,7 @@ import usersRouter from "./routes/user";
 import authRouter from "./routes/auth";
 import transactionRouter from "./routes/transactions";
 import dotenv from "dotenv";
+import { swaggerDoc } from "./Config/swaggerDoc";
 import { 
   appError, 
   errorHandler, 
@@ -20,6 +21,9 @@ app.use(cors({origin: "*", credentials: true }));
 app.use(express.json());
 app.use(logger("dev"));
 app.use(cookieParser());
+
+swaggerDoc(app);
+
 
 //routes
 app.use("/api/v1/users", usersRouter);

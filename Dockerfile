@@ -11,8 +11,12 @@ RUN yarn install
 COPY src ./src
 COPY tsconfig.json ./tsconfig.json
 
+#Run migration
+RUN yarn migrate:latest --knexfile src/database/knexfile.ts
+
 # Build
 RUN yarn compile
+
 
 # Start production image build
 FROM gcr.io/distroless/nodejs:16
@@ -23,4 +27,6 @@ COPY --from=base /build /build
 
 # Expose port 3000
 EXPOSE 3001
+
+
 CMD ["build/src/app.js"]
