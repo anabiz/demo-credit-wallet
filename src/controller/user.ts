@@ -119,7 +119,7 @@ const fundTransfer = async (req: Request, res: Response) => {
     const description = validateResult.value.description
     const {id} = req.user;
 
-    if(isNaN(amount)){
+    if(isNaN(amount) || amount <= 0){
       return res.status(400).json({
         message: "Invalid amount",
         Error: ""
@@ -194,7 +194,7 @@ const fundMyWallet = async (req: Request, res: Response) => {
   const description = validateResult.value.description;
   const {id} = req.user;
 
-  if(isNaN(amount)){
+  if(isNaN(amount) || amount <= 0){
     return res.status(400).json({
       message: "Invalid amount",
       Error: ""
@@ -252,7 +252,7 @@ const withdrawFund = async (req: Request, res: Response) => {
     const amount =  Number(req.body.amount);
     const {id} = req.user;
 
-    if(isNaN(amount)){
+    if(isNaN(amount) || amount <= 0){
       return res.status(400).json({
         message: "Invalid amount",
         Error: ""
