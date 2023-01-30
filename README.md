@@ -37,7 +37,9 @@ need to be set in the `.env` file:
 * `DB_NAME`
 
 ## Starting the containers
-
+There arec two services as defined in the docker-compose.yml file.
+* `db service, which is the mysql database`
+* `api-server, i.e the api server for demo credit wallet
 To start the containers, you can execute the following command from the project
 root directory:
 
@@ -68,6 +70,14 @@ To clean the volume as well, use the `-v` parameter as `docker-compose down -v`.
 * If a container persists still, use `docker-compose rm <container_id>` to
   remove it from the docker-compose cache and then recreate the containers.
 
+
+## Runing test
+Make sure the db service (database container) is runing before runing the test
+#### Fellow the steps below:
+* `Run "yarn"`
+* `Run "yarn test"`
+
+![UML](https://github.com/anabiz/demo-credit-wallet/blob/develop/demo-credit-test-result.png)
 
 
 ## API Endpoints
