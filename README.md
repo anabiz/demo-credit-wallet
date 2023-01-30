@@ -1,5 +1,9 @@
 # Demo Credit Wallet Service
 
+## App data model
+
+![UML](https://github.com/Access-Fullstack/stare/blob/develop/demo-credit-er-diagram.png)
+
 ## Requirements
 
 * Docker
@@ -58,4 +62,4 @@ To clean the volume as well, use the `-v` parameter as `docker-compose down -v`.
 * If a container persists still, use `docker-compose rm <container_id>` to
   remove it from the docker-compose cache and then recreate the containers.
 
-  
+
