@@ -84,7 +84,7 @@ const register = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: registeredUser.userId, email },
       process.env.JWT_SECRET!,
-      { expiresIn: "2h",}
+      { expiresIn: process.env.JWT_EXPIRATION!,}
     );
 
     return res.status(201).json({
@@ -128,7 +128,7 @@ const fundTransfer = async (req: Request, res: Response) => {
     
     const debitor = await getWalletByUserId(id);
     if(!debitor){
-      return res.status(400).json({
+      return res.status(404).json({
         message: "User not found",
         Error: ""
       });
@@ -143,7 +143,7 @@ const fundTransfer = async (req: Request, res: Response) => {
 
     const creditor = await getWalletByWalletId(creditorWalletId);
     if(!creditor){
-      return res.status(400).json({
+      return res.status(404).json({
         message: "No user found with this wallet ID",
         Error: ""
       });
