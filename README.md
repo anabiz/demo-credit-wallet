@@ -2,7 +2,7 @@
 
 ## App data model
 
-![UML](https://github.com/Access-Fullstack/stare/blob/develop/demo-credit-er-diagram.png)
+![UML](https://github.com/anabiz/demo-credit-wallet/blob/develop/demo-credit-er-diagram.png)
 
 ## Requirements
 
