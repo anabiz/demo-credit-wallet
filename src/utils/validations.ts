@@ -16,7 +16,7 @@ export const loginSchema = Joi.object().keys({
 
 export const registerSchema = Joi.object().keys({
     email: Joi.string().required(),
-    password: Joi.string().required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+    password: Joi.string().required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     phoneNumber: Joi.string().required()
