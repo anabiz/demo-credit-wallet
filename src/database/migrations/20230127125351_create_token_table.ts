@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('tokenValue').notNullable().unique();
         table.enu('tokemType', ['PASSWORD_RESET','ACCOUNT_VERIFICATION']).notNullable()
           .defaultTo('ACCOUNT_VERIFICATION');
-        table.uuid('userId').references('id').inTable('user');
+        table.uuid('userId').references('id').inTable('user').onDelete('CASCADE');
         table.timestamps(true, true);
     })
 }
